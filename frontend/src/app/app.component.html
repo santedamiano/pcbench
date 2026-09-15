@@ -1,0 +1,38 @@
+<h1>PCBench</h1>
+
+@if (benchmark) {
+
+  <h2>{{ benchmark.buildName }}</h2>
+
+  <p>
+    <strong>CPU:</strong>
+    {{ benchmark.cpu }}
+  </p>
+
+  <p>
+    <strong>GPU:</strong>
+    {{ benchmark.gpu }}
+  </p>
+
+  <p>
+    <strong>RAM:</strong>
+    {{ benchmark.ram }}
+  </p>
+
+  <h2>Benchmark Result</h2>
+
+  <p>
+    <strong>Game:</strong>
+    {{ benchmark.game }}
+  </p>
+
+  <p>
+    <strong>Average FPS:</strong>
+    {{ benchmark.averageFPS }}
+  </p>
+
+} @else {
+
+  <p>Loading benchmark...</p>
+
+}
