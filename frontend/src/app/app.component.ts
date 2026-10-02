@@ -1,28 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Benchmark {
-  buildName: string;
-  cpu: string;
-  gpu: string;
-  ram: string;
-  game: string;
-  averageFPS: number;
-}
+import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title = 'PCBench';
+  leaderboardEntries: any[] = [];
+  cpuSearchQuery: string = ''; // Tracks search input strings
 
-  title = 'frontend';
+  constructor(private http: HttpClient) {}
 
-  benchmark: Benchmark | null = null;
+  ngOnInit() {
+    this.fetchLeaderboard(); // Automatically pull data on page load
+  }
 
-  async ngOnInit() {
-    const response = await fetch('http://localhost:3000/api/benchmark');
-    this.benchmark = await response.json();
+  fetchLeaderboard() {
+    let url = 'http://localhost:3000/api/leaderboard';
+    
+    // Append your query filter if text is entered
+    if (this.cpuSearchQuery) {
+      url += `?cpu=${encodeURIComponent(this.cpuSearchQuery)}`;
+    }
+
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        this.leaderboardEntries = data;
+      },
+      error: (err) => {
+        console.error('Failed to communicate with Express database API:', err);
+      }
+    });
   }
 }

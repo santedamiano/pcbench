@@ -1,38 +1,54 @@
-<h1>PCBench</h1>
+<div class="pcbench-container" style="padding: 20px; font-family: sans-serif;">
+  <h2>🏆 PCBench Community Leaderboard Network</h2>
+  <p>Compare setups and search user configurations across the system.</p>
 
-@if (benchmark) {
+  <!-- Community Filtering Interface Component -->
+  <div class="search-filters" style="margin-bottom: 20px;">
+    <input 
+      type="text" 
+      [(ngModel)]="cpuSearchQuery" 
+      placeholder="Search by CPU model (e.g., 5600, i5)" 
+      style="padding: 8px; width: 250px; margin-right: 10px;"
+    />
+    <button (click)="fetchLeaderboard()" style="padding: 8px 15px; cursor: pointer;">
+      Filter Builds
+    </button>
+  </div>
 
-  <h2>{{ benchmark.buildName }}</h2>
-
-  <p>
-    <strong>CPU:</strong>
-    {{ benchmark.cpu }}
-  </p>
-
-  <p>
-    <strong>GPU:</strong>
-    {{ benchmark.gpu }}
-  </p>
-
-  <p>
-    <strong>RAM:</strong>
-    {{ benchmark.ram }}
-  </p>
-
-  <h2>Benchmark Result</h2>
-
-  <p>
-    <strong>Game:</strong>
-    {{ benchmark.game }}
-  </p>
-
-  <p>
-    <strong>Average FPS:</strong>
-    {{ benchmark.averageFPS }}
-  </p>
-
-} @else {
-
-  <p>Loading benchmark...</p>
-
-}
+  <!-- Dynamic Relational Table Layout -->
+  <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead style="background-color: #f2f2f2;">
+      <tr>
+        <th>User Profile</th>
+        <th>PC Build Name</th>
+        <th>Hardware Rig Specs (CPU / GPU / RAM)</th>
+        <th>Tested Game</th>
+        <th>Benchmark Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of leaderboardEntries">
+        <td>
+          <strong style="color: #0066cc; cursor: pointer;">{{ entry.ownerName }}</strong>
+        </td>
+        <td>{{ entry.buildName }}</td>
+        <td>
+          <small>
+            <strong>CPU:</strong> {{ entry.cpu }} <br>
+            <strong>GPU:</strong> {{ entry.gpu }} <br>
+            <strong>RAM:</strong> {{ entry.ram }}
+          </small>
+        </td>
+        <td>{{ entry.game }}</td>
+        <td>
+          <span style="color: green; font-weight: bold;">{{ entry.averageFPS }} FPS</span>
+        </td>
+      </tr>
+      <tr *ngIf="leaderboardEntries.length === 0">
+        <td colspan="5" style="text-align: center; color: #777;">
+          No hardware matching those parameters found in the community ledger.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
